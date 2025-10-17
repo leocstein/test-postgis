@@ -4,6 +4,8 @@ from utils.file_handler import list_zip_files, extract_shapefile, read_shapefile
 from utils.set_multipolygon import set_multipolygon
 from utils.set_datetime_dataframe import set_datetime_dataframe
 from utils.data_comparator import concat_dataframe, duplicates_rows_dataframe
+from utils.db_connection import get_sqlalchemy_engine
+from config import TARGET_TABLE
 import os
 
 # Etapa 1: Listar arquivos .zip válidos
@@ -50,3 +52,6 @@ gdf_combined = concat_dataframe(old_gdf, new_gdf)
 print(f"GeoDataFrame::CONCAT:: \n {gdf_combined}")
 
 duplicates = duplicates_rows_dataframe(gdf_combined)
+
+engine = get_sqlalchemy_engine()
+old_gdf.to_postgis(TARGET_TABLE, engine, if_exists='append', index=False)
