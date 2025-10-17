@@ -53,5 +53,8 @@ print(f"GeoDataFrame::CONCAT:: \n {gdf_combined}")
 
 duplicates = duplicates_rows_dataframe(gdf_combined)
 
-engine = get_sqlalchemy_engine()
-old_gdf.to_postgis(TARGET_TABLE, engine, if_exists='append', index=False)
+try:
+    engine = get_sqlalchemy_engine()
+    old_gdf.to_postgis(TARGET_TABLE, engine, if_exists='append', index=False)
+except Exception as e:
+    print(f"Erro ao inserir os dados no banco: {e}")
